@@ -8,7 +8,7 @@ Start node project with bun
 - [Git](https://git-scm.com/downloads)
 - [Bun](https://bun.sh)
 
-  > Clone the repository:
+> Clone the repository:
 
 ```
 git clone https://github.com/salviega/node-starter-bun.git
