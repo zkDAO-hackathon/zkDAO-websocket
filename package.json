@@ -10,7 +10,8 @@
 		"start:dev": "bun run src/index.ts"
 	},
 	"dependencies": {
-		"openai": "^5.7.0"
+		"openai": "^5.7.0",
+		"viem": "^2.31.4"
 	},
 	"devDependencies": {
 		"@types/bun": "^1.2.17",
