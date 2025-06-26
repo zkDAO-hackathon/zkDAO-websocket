@@ -1,6 +1,6 @@
-# Node starter bun
+# ZKDAO Websocket
 
-Start node project with bun
+by hackathon
 
 ## Quick start 🏄
 
