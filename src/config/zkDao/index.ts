@@ -1,7 +1,8 @@
 import type { Address, Chain, WalletClient } from 'viem'
-import { createPublicClient, getContract, http } from 'viem'
+import { createPublicClient, getContract, http, parseGwei } from 'viem'
+import { writeContract } from 'viem/actions'
 
-import zkDaoJson from '@/assets/json/contracts/ethereum-sepolia/MockZKDAO.json'
+import zkDaoJson from '@/assets/json/contracts/ethereum-sepolia/ZKDAO.json'
 import type { PaidForDaoCreationEvent } from '@/models/paid-for-dao-creation-event.model'
 
 export class zkDaoContract {
@@ -32,24 +33,21 @@ export class zkDaoContract {
 	//        WRITE METHODS
 	// =========================
 
-	async createDao(createDaoParams: PaidForDaoCreationEvent, account: Address) {
-		const contract = this.getWriteContract()
-
-		if (typeof contract.write.createDao !== 'function') {
-			throw new Error('createDao function is not available on the contract.')
-		}
-
-		return contract.write.createDao(
-			[
-				createDaoParams.tokenParams,
-				createDaoParams.minDelay,
-				createDaoParams.governorParams,
-				createDaoParams.to,
-				createDaoParams.amounts
+	async createDao(params: PaidForDaoCreationEvent) {
+		return writeContract(this.walletClient, {
+			address: zkDaoJson.address as Address,
+			abi: zkDaoJson.abi,
+			functionName: 'createDao',
+			args: [
+				params.tokenParams,
+				params.minDelay,
+				params.governorParams,
+				params.to,
+				params.amounts
 			],
-			{
-				account: account
-			}
-		)
+			maxFeePerGas: parseGwei('1'), // 1 gwei ≈ 0.003 ETH total
+			maxPriorityFeePerGas: parseGwei('1'), // 1 gwei (propina)
+			chain: this.publicClient.chain
+		})
 	}
 }

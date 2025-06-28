@@ -8,7 +8,7 @@ import {
 } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 
-import zkDaoJson from '@/assets/json/contracts/ethereum-sepolia/MockZKDAO.json'
+import zkDaoJson from '@/assets/json/contracts/ethereum-sepolia/ZKDAO.json'
 import type { PaidForDaoCreationEvent } from '@/models/paid-for-dao-creation-event.model'
 
 export class Wallet {
@@ -49,7 +49,11 @@ export class Wallet {
 			onLogs: async logs => {
 				for (const log of logs) {
 					const args = log.args as unknown as PaidForDaoCreationEvent
-					console.log('🧩  Event detected:', log, `on ${this.chain.name}...`)
+					console.log(
+						'🧩  Event detected:',
+						log.args,
+						`on ${this.chain.name}...`
+					)
 					await callback(args)
 				}
 			}

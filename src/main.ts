@@ -26,12 +26,12 @@ async function main() {
 		fujiWallet.getWalletClient()
 	)
 
-	await fujiWallet.onPaidForDaoCreation(async event => {
+	await fujiWallet.onPaidForDaoCreation(async args => {
 		try {
 			// Create DAO on Avalanche Fuji
 			console.log('🟢 Creating DAO on Fuji...')
 			const account = fujiWallet.getAccount()
-			const createDaoTx = await fujiZkDao.createDao(event, account)
+			const createDaoTx = await fujiZkDao.createDao(args, account)
 
 			await waitForTransactionReceipt(fujiWallet.getWalletClient(), {
 				hash: createDaoTx
@@ -45,7 +45,7 @@ async function main() {
 
 			// Create DAO on Sepolia
 			console.log('🟢 Creating DAO on Sepolia...')
-			const sepoliaCreateDaoTx = await sepoliaZkDao.createDao(event, account)
+			const sepoliaCreateDaoTx = await sepoliaZkDao.createDao(args, account)
 
 			await waitForTransactionReceipt(sepoliaWallet.getWalletClient(), {
 				hash: sepoliaCreateDaoTx
@@ -75,12 +75,13 @@ async function main() {
 		sepoliaWallet.getWalletClient()
 	)
 
-	await sepoliaWallet.onPaidForDaoCreation(async event => {
+	await sepoliaWallet.onPaidForDaoCreation(async args => {
 		try {
 			// Create DAO on Sepolia
 			console.log('🟢 Creating DAO on Sepolia...')
 			const account = sepoliaWallet.getAccount()
-			const sepoliaCreateDaoTx = await sepoliaZkDao.createDao(event, account)
+
+			const sepoliaCreateDaoTx = await sepoliaZkDao.createDao(args, account)
 
 			await waitForTransactionReceipt(sepoliaWallet.getWalletClient(), {
 				hash: sepoliaCreateDaoTx
@@ -93,18 +94,18 @@ async function main() {
 			)
 
 			// Create DAO on Fuji
-			console.log('🟢 Creating DAO on Fuji...')
-			const fujiCreateDaoTx = await fujiZkDao.createDao(event, account)
+			// console.log('🟢 Creating DAO on Fuji...')
+			// const fujiCreateDaoTx = await fujiZkDao.createDao(args, account)
 
-			await waitForTransactionReceipt(fujiWallet.getWalletClient(), {
-				hash: fujiCreateDaoTx
-			})
+			// await waitForTransactionReceipt(fujiWallet.getWalletClient(), {
+			// 	hash: fujiCreateDaoTx
+			// })
 
-			console.log(
-				'✅ DAO created on Fuji, hash:',
-				fujiCreateDaoTx,
-				`on ${avalancheFuji.name}`
-			)
+			// console.log(
+			// 	'✅ DAO created on Fuji, hash:',
+			// 	fujiCreateDaoTx,
+			// 	`on ${avalancheFuji.name}`
+			// )
 		} catch (error) {
 			console.error('❌ Error creating DAO:', error)
 		}
