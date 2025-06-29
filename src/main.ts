@@ -30,8 +30,7 @@ async function main() {
 		try {
 			// Create DAO on Avalanche Fuji
 			console.log('🟢 Creating DAO on Fuji...')
-			const account = fujiWallet.getAccount()
-			const createDaoTx = await fujiZkDao.createDao(args, account)
+			const createDaoTx = await fujiZkDao.createDao(args)
 
 			await waitForTransactionReceipt(fujiWallet.getWalletClient(), {
 				hash: createDaoTx
@@ -45,7 +44,7 @@ async function main() {
 
 			// Create DAO on Sepolia
 			console.log('🟢 Creating DAO on Sepolia...')
-			const sepoliaCreateDaoTx = await sepoliaZkDao.createDao(args, account)
+			const sepoliaCreateDaoTx = await sepoliaZkDao.createDao(args)
 
 			await waitForTransactionReceipt(sepoliaWallet.getWalletClient(), {
 				hash: sepoliaCreateDaoTx
@@ -79,9 +78,8 @@ async function main() {
 		try {
 			// Create DAO on Sepolia
 			console.log('🟢 Creating DAO on Sepolia...')
-			const account = sepoliaWallet.getAccount()
 
-			const sepoliaCreateDaoTx = await sepoliaZkDao.createDao(args, account)
+			const sepoliaCreateDaoTx = await sepoliaZkDao.createDao(args)
 
 			await waitForTransactionReceipt(sepoliaWallet.getWalletClient(), {
 				hash: sepoliaCreateDaoTx
@@ -95,7 +93,7 @@ async function main() {
 
 			// Create DAO on Fuji
 			// console.log('🟢 Creating DAO on Fuji...')
-			// const fujiCreateDaoTx = await fujiZkDao.createDao(args, account)
+			// const fujiCreateDaoTx = await fujiZkDao.createDao(args)
 
 			// await waitForTransactionReceipt(fujiWallet.getWalletClient(), {
 			// 	hash: fujiCreateDaoTx

@@ -43,7 +43,8 @@ export class zkDaoContract {
 				params.minDelay,
 				params.governorParams,
 				params.to,
-				params.amounts
+				params.amounts,
+				params.creator
 			],
 			maxFeePerGas: parseGwei('1'), // 1 gwei ≈ 0.003 ETH total
 			maxPriorityFeePerGas: parseGwei('1'), // 1 gwei (propina)

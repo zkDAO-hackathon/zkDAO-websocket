@@ -18,4 +18,5 @@ export interface PaidForDaoCreationEvent {
 	to: Address[]
 	amounts: bigint[]
 	value: bigint
+	creator: Address
 }
