@@ -1,4 +1,4 @@
-import type { AbiEvent, Address, Chain, Hex } from 'viem'
+import type { Abi, AbiEvent, Address, Chain, Hex } from 'viem'
 import {
 	createPublicClient,
 	createWalletClient,
@@ -8,18 +8,28 @@ import {
 } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 
-import zkDaoJson from '@/assets/json/contracts/ethereum-sepolia/ZKDAO.json'
 import type { PaidForDaoCreationEvent } from '@/models/paid-for-dao-creation-event.model'
 
 export class Wallet {
 	private publicClient
 	private walletClient
 	private account
+	private abi: Abi
+	private address: Address
 	private chain: Chain
 
-	constructor(chain: Chain, privateKey: Hex, rpc: string, websocket: string) {
+	constructor(
+		chain: Chain,
+		privateKey: Hex,
+		rpc: string,
+		websocket: string,
+		address: Address,
+		abi: Abi
+	) {
 		this.chain = chain
 		this.account = privateKeyToAccount(privateKey)
+		this.address = address
+		this.abi = abi
 
 		this.publicClient = createPublicClient({
 			chain,
@@ -36,28 +46,33 @@ export class Wallet {
 	async onPaidForDaoCreation(
 		callback: (event: PaidForDaoCreationEvent) => Promise<void>
 	) {
-		const event = getAbiItem({
-			abi: zkDaoJson.abi,
-			name: 'PaidForDaoCreation'
-		}) as AbiEvent
+		try {
+			const event = getAbiItem({
+				abi: this.abi,
+				name: 'PaidForDaoCreation'
+			}) as AbiEvent
 
-		console.log(`🎧 Listening PaidForDaoCreation on ${this.chain.name}...`)
+			console.log(`🎧 Listening PaidForDaoCreation on ${this.chain.name}...`)
 
-		await this.publicClient.watchEvent({
-			address: zkDaoJson.address as Address,
-			event,
-			onLogs: async logs => {
-				for (const log of logs) {
-					const args = log.args as unknown as PaidForDaoCreationEvent
-					console.log(
-						'🧩  Event detected:',
-						log.args,
-						`on ${this.chain.name}...`
-					)
-					await callback(args)
+			this.publicClient.watchEvent({
+				address: this.address,
+				event,
+				onLogs: async logs => {
+					for (const log of logs) {
+						const args = log.args as unknown as PaidForDaoCreationEvent
+						console.log(
+							'🧩  Event detected:',
+							log.args,
+							`on ${this.chain.name}...`
+						)
+						await callback(args)
+					}
 				}
-			}
-		})
+			})
+		} catch (error) {
+			console.error('❌', error)
+			process.exit(1)
+		}
 	}
 
 	getWalletClient() {
